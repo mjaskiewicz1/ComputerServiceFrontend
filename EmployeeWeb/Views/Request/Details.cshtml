@@ -1,0 +1,188 @@
+﻿@using Common.Enums
+@model Common.ViewModels.RequestCreateViewModel
+
+@{
+    ViewBag.Title = $"Zgłoszenie numer: {Html.Raw(Model.Rma)}";
+    Layout = "_Layout";
+}
+
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+
+<div class="paddingpage">
+
+    @if (Model.RequestStatus != RequestStatus.Zakończone)
+    {
+        <partial name="Buttons/_BackEditButton" model="@Model.Rma"/>
+    }
+    else
+    {
+        <div class="row">
+            <a asp-action="Index" class="btn-small waves-effect waves-light green">
+                Wstecz
+                <i class="material-icons left">arrow_back</i>
+            </a>
+        </div>
+    }
+    @await Component.InvokeAsync("RequestHistory", Model.Rma)
+    <form>
+
+        <div class="card">
+            <div class="card-title">Status Zgłoszenia</div>
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-form col s12">
+                        <label asp-for="RequestStatus" class="active"></label>
+                        <input type="text" value="@Model.RequestStatus" readonly="readonly" disabled="disabled"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Dane osobowe</div>
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-form col s12 m6 ">
+                        <label asp-for="Name" class="active"></label>
+                        <input asp-for="Name" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+
+                    </div>
+
+
+                    <div class="input-form col s12 m6 ">
+                        <label asp-for="Surname" class="active"></label>
+                        <input asp-for="Surname" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-form col s12 m6">
+                        <label asp-for="PhoneNumber" class="active"></label>
+                        <input asp-for="PhoneNumber" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-form col s12 m6">
+                        <label asp-for="Email" class="active"></label>
+                        <input asp-for="Email" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Dane urządzenia</div>
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-form col s12 m6 ">
+                        <label asp-for="Brand" class="active"></label>
+                        <input asp-for="Brand" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-form col s12 m6 ">
+                        <label asp-for="Model" class="active"></label>
+                        <input asp-for="Model" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-form col s12 ">
+                        <label asp-for="SerialNumber" class="active"></label>
+                        <input asp-for="SerialNumber" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-form col s12">
+                        <label asp-for="Details" class="active"></label>
+                        <textarea asp-for="Details" data-length="250" class="materialize-textarea" readonly="readonly" disabled="disabled"></textarea>
+                    </div>
+                    <div class="input-form col s12">
+                        <label asp-for="FailureDescription" class="active"></label>
+                        <textarea asp-for="FailureDescription" data-length="600" class="materialize-textarea input-form" readonly="readonly" disabled="disabled"></textarea>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Dane do faktury</div>
+            <div class="card-content">
+
+                @if (Model.RequestInvoiceDetailCompanyViewModel == null)
+                {
+                    <div id="contentInvoiceIndividualClient">
+                        <div class="row">
+                            <div class="input-form col s12 m6 ">
+                                <label asp-for="RequestInvoiceDetailIndividualClientViewModel.Name" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailIndividualClientViewModel.Name" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+                            <div class="input-form col s12 m6 ">
+                                <label asp-for="RequestInvoiceDetailIndividualClientViewModel.Surname" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailIndividualClientViewModel.Surname" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+
+                            <div class="input-form col s12 m6 ">
+                                <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+                            <div class="input-form col s12  m6">
+                                <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.PostcodeWithDash" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.PostcodeWithDash" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+                            <div class="input-form col s12">
+                                <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street" class="input-form" readonly="readonly" disabled="disabled"/>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div id="contentInvoiceCompany">
+                        <div class="row">
+                            <div class="input-form col s12 m6 ">
+                                <label asp-for="RequestInvoiceDetailCompanyViewModel.Nip" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailCompanyViewModel.Nip" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+                            <div class="input-form col s12 m6 ">
+                                <label asp-for="RequestInvoiceDetailCompanyViewModel.NameCompany" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailCompanyViewModel.NameCompany" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+
+                            <div class="input-form col s12 m6 ">
+                                <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+                            <div class="input-form col s12  m6">
+                                <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.PostcodeWithDash" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.PostcodeWithDash" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+                            <div class="input-form col s12">
+                                <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street" class="active"></label>
+                                <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street" class="input-form input-field" readonly="readonly" disabled="disabled">
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (Model.RequestShipmentDetailViewModel != null)
+        {
+            <div class="card">
+                <div class="card-title">Dane do wysyłki</div>
+                <div class="card-content">
+                    <div id="ShipmentDetail">
+                        <div class="row">
+                            <div class="input-form col s12 m6 ">
+                                <label asp-for="RequestShipmentDetailViewModel.City" class="active"></label>
+                                <input asp-for="RequestShipmentDetailViewModel.City" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+                            <div class="input-form col s12  m6">
+                                <label asp-for="RequestShipmentDetailViewModel.PostcodeWithDash" class="active"></label>
+                                <input asp-for="RequestShipmentDetailViewModel.PostcodeWithDash" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                            </div>
+                            <div class="input-form col s12">
+                                <label asp-for="RequestShipmentDetailViewModel.Street" class="active"></label>
+                                <input asp-for="RequestShipmentDetailViewModel.Street" class="input-form input-field " readonly="readonly" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @await Component.InvokeAsync("Blob", Model.Rma)
+
+
+
+
+    </form>
+</div>

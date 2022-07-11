@@ -1,0 +1,12 @@
+﻿@model string
+@if (Model == null || Model.Equals(string.Empty))
+{
+    <div class="card error-list-content red " id="ErrorListContent" style="display: none;">
+        <ul class="card-content  error-list  ">
+        </ul>
+    </div>
+}
+<div class="card error-list-content red " id="@Model" style="display: none;">
+    <ul class="card-content  error-list  ">
+    </ul>
+</div>

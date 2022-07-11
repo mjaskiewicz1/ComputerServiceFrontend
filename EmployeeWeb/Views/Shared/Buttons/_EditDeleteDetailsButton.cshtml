@@ -1,0 +1,19 @@
+﻿@model dynamic
+
+<td>
+    <div class="center">
+        <a class="white-text btn-floating btn-floating  btn-small waves-light green" asp-action="Edit" asp-route-Id="@Model">
+            <i class="material-icons center  white-text  white-text">edit</i>
+        </a>
+
+        <a class="white-text btn-floating btn-floating  btn-small waves-light blue" asp-action="Details" asp-route-Id="@Model">
+            <i class="material-icons center  white-text">info_outline</i>
+        </a>
+
+        <a class=" white-text btn-floating btn-small waves-effect waves-light red" asp-action="Delete" asp-route-Id="@Model">
+            <i class="material-icons center  white-text">delete</i>
+        </a>
+
+
+    </div>
+</td>

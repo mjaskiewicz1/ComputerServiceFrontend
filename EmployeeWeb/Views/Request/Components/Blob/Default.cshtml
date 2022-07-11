@@ -1,0 +1,24 @@
+﻿@model Common.ViewModels.BlobViewModel
+
+@if (Model.Rma != null)
+{
+    <div class="card">
+        <div class="card-title">Załączniki</div>
+        <div class="card-content">
+            <div class="row">
+                <div class="col s12">
+                    <ul>
+                        @foreach (var item in Model.NameBlobLists)
+                        {
+                            <li>
+                                <a asp-controller="Request" asp-action="DownloadAttachment"asp-route-rma="@Model.Rma" asp-route-name="@item">
+                                    @item
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}

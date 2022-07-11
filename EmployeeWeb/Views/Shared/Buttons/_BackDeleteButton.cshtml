@@ -1,0 +1,18 @@
+﻿@model dynamic
+
+<div class="paddingpage">
+    <form asp-action="DeleteConfirm">
+        <div class="row">
+            <a asp-action="Index" class="btn-small waves-effect waves-light green">
+                Wstecz
+                <i class="material-icons left">arrow_back</i>
+            </a>
+            <button class="btn-small waves-effect waves-light red" type="submit">
+
+                <i class="material-icons left">delete</i>
+                Usuń
+            </button>
+            <input name="id" value="@Model" type="hidden"/>
+        </div>
+    </form>
+</div>

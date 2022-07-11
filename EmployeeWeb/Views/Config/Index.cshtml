@@ -1,0 +1,98 @@
+﻿@model Common.ViewModels.ConfigViewModel
+@{
+    ViewData["Title"] = "Dane Firmy";
+}
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+<div class="paddingpage">
+    <form asp-action="Index">
+        <div class="card">
+            <div class="row card-content">
+                <div class="row">
+                    <div class="input-field col s12 m6">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="input-form"/>
+                        <span asp-validation-for="Name" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12 m6">
+                        <label asp-for="Nip"></label>
+                        <input asp-for="Nip" class="input-form"/>
+                        <span asp-validation-for="Nip" class="invalid"></span>
+                    </div>
+                </div>
+
+                <div class="input-field col s12 m6">
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" class="input-form"/>
+                    <span asp-validation-for="PhoneNumber" class="invalid"></span>
+                </div>
+                <div class="input-field col s12 m6 ">
+                    <label asp-for="AddressViewModel.City"></label>
+                    <input asp-for="AddressViewModel.City" class="input-form"/>
+                    <span asp-validation-for="AddressViewModel.City" class="invalid"></span>
+                </div>
+                <div class="input-field col s12 m6 l4">
+                    <label asp-for="AddressViewModel.Postcode"></label>
+                    <input asp-for="AddressViewModel.Postcode" class="input-form"/>
+                    <span asp-validation-for="AddressViewModel.Postcode" class="invalid"></span>
+                </div>
+                <div class="input-field col s12 m6 l4">
+                    <label asp-for="AddressViewModel.Street"></label>
+                    <input asp-for="AddressViewModel.Street" class="input-form"/>
+                    <span asp-validation-for="AddressViewModel.Street" class="invalid"></span>
+                </div>
+                <div class="input-field col s12 l4 ">
+                    <label asp-for="PostalTown"></label>
+                    <input asp-for="PostalTown" class="input-form"/>
+                    <span asp-validation-for="PostalTown" class="invalid"></span>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12  m6">
+                        <label asp-for="BankName"></label>
+                        <input asp-for="BankName" class="input-form"/>
+                        <span asp-validation-for="BankName" class="invalid"></span>
+                    </div>
+
+                    <div class="input-field col s12  m6">
+                        <label asp-for="BankAccountNumber"></label>
+                        <input asp-for="BankAccountNumber" class="input-form"/>
+                        <span asp-validation-for="BankAccountNumber" class="invalid"></span>
+                    </div>
+                </div>
+                <div class="input-field col s12 ">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="input-form"/>
+                    <span asp-validation-for="Email" class="invalid"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="input-field col s12 center">
+            <button type="submit" class="btn waves-effect waves-light  blue darken-4">
+                Zapisz
+                <i class="material-icons right">save</i>
+            </button>
+        </div>
+    </form>
+
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_MaskInputPartial");
+
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded",
+            (event) => {
+                MaskForm.NipMask("#Nip");
+                MaskForm.PostCodeMask("#AddressViewModel_Postcode");
+                $('input[data-val=true]').blur(function() {
+                    $(this).valid();
+                });
+            });
+    </script>
+}

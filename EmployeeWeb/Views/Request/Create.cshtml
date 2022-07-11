@@ -1,0 +1,353 @@
+﻿@using Common.Enums
+@model Common.ViewModels.RequestCreateViewModel
+@{
+    ViewBag.Title = "Tworzenie Zgłoszenia";
+}
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+
+<form asp-action="Create" enctype="multipart/form-data" id="RequestCreate">
+<div class="paddingpage">
+@await Html.PartialAsync("Buttons/_BackSaveButton")
+<div class="card">
+    <div class="card-title">Status Zgłoszenia</div>
+    <div class="card-content">
+        <div class="row">
+            <div class="input-field col s12">
+                <select asp-for="RequestStatus" class="input-form" >
+                    <option value="0">Nowe</option>
+                    <option value="1">Przyjęte</option>
+                </select>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-title">Dane osobowe</div>
+    <div class="card-content">
+        <div class="row">
+            <div class="input-field col s12 m6 ">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="input-form input-field"/>
+                <span asp-validation-for="Name" class="invalid"></span>
+            </div>
+
+
+            <div class="input-field col s12 m6 ">
+                <label asp-for="Surname"></label>
+                <input asp-for="Surname" class="input-form input-field"/>
+                <span asp-validation-for="Surname" class="invalid"></span>
+            </div>
+            <div class="input-field col s12 m6">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="input-form input-field"/>
+                <span asp-validation-for="PhoneNumber" class="invalid"></span>
+            </div>
+            <div class="input-field col s12 m6">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="input-form input-field"/>
+                <span asp-validation-for="Email" class="invalid"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-title">Dane urządzenia</div>
+    <div class="card-content">
+        <div class="row">
+            <div class="input-field col s12 m6 ">
+                <label asp-for="Brand"></label>
+                <input asp-for="Brand" class="input-form input-field"/>
+                <span asp-validation-for="Brand" class="invalid"></span>
+            </div>
+
+
+            <div class="input-field col s12 m6 ">
+                <label asp-for="Model"></label>
+                <input asp-for="Model" class="input-form input-field"/>
+                <span asp-validation-for="Model" class="invalid"></span>
+            </div>
+            <div class="input-field col s12 ">
+                <label asp-for="SerialNumber"></label>
+                <input asp-for="SerialNumber" class="input-form input-field"/>
+                <span asp-validation-for="SerialNumber" class="invalid"></span>
+            </div>
+            <div class="input-field col s12">
+                <label asp-for="Details"></label>
+                <textarea asp-for="Details" data-length="250" class="materialize-textarea"></textarea>
+                <span asp-validation-for="Details" class="invalid"></span>
+            </div>
+            <div class="input-field col s12">
+                <label asp-for="FailureDescription"></label>
+                <textarea asp-for="FailureDescription" data-length="600" class="materialize-textarea input-form"></textarea>
+                <span asp-validation-for="FailureDescription" class="invalid"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-title row">Dane do faktury</div>
+    <div class="card-content">
+        <div class="row">
+            @foreach (var clientType in Model.ClientTypes)
+            {
+                <p>
+                    <label class="col s6">
+                        @Html.RadioButtonFor(model => model.ClientType, clientType, new { @class = "clientTypeRadioButton" })
+                        <span>@clientType</span>
+                    </label>
+                </p>
+            }
+        </div>
+        @if (Model.ClientType == "Firma")
+        {
+            <div id="contentInvoiceIndividualClient" style="display: none">
+                <div class="row">
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.Name"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.Name" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.Name" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.Surname"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.Surname" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.Surname" class="invalid"></span>
+                    </div>
+
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12  m6">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Postcode"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Postcode" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Postcode" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street" class="input-form">
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street" class="invalid"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="contentInvoiceCompany">
+                <div class="row">
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.Nip"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.Nip" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.Nip" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.NameCompany"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.NameCompany" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.NameCompany" class="invalid"></span>
+                    </div>
+
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12  m6">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Postcode"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Postcode" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Postcode" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street" class="input-form">
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street" class="invalid"></span>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="contentInvoiceIndividualClient">
+                <div class="row">
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.Name"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.Name" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.Name" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.Surname"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.Surname" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.Surname" class="invalid"></span>
+                    </div>
+
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12  m6">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Postcode"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Postcode" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Postcode" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12">
+                        <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street"></label>
+                        <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street" class="input-form">
+                        <span asp-validation-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street" class="invalid"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="contentInvoiceCompany" style="display: none">
+                <div class="row">
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.Nip"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.Nip" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.Nip" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.NameCompany"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.NameCompany" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.NameCompany" class="invalid"></span>
+                    </div>
+
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12  m6">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Postcode"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Postcode" class="input-form input-field"/>
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Postcode" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12">
+                        <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street"></label>
+                        <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street" class="input-form">
+                        <span asp-validation-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street" class="invalid"></span>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Dane do wysyłki</div>
+    <div class="card-content">
+        <div class="row">
+            @foreach (var clientType in Model.ShipmentTypes)
+            {
+                <p>
+                    <label class="col s6">
+                        @Html.RadioButtonFor(model => model.ShipmentType, clientType, new { @class = "ShipmentTypeRadioButton" })
+                        <span>@clientType</span>
+                    </label>
+                </p>
+            }
+        </div>
+        @if (Model.ShipmentType == "Wysyłka")
+        {
+            <div id="ShipmentDetail">
+                <div class="row">
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestShipmentDetailViewModel.City"></label>
+                        <input asp-for="RequestShipmentDetailViewModel.City" class="input-form input-field"/>
+                        <span asp-validation-for="RequestShipmentDetailViewModel.City" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12  m6">
+                        <label asp-for="RequestShipmentDetailViewModel.Postcode"></label>
+                        <input asp-for="RequestShipmentDetailViewModel.Postcode" class="input-form input-field"/>
+                        <span asp-validation-for="RequestShipmentDetailViewModel.Postcode" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12">
+                        <label asp-for="RequestShipmentDetailViewModel.Street"></label>
+                        <input asp-for="RequestShipmentDetailViewModel.Street" class="input-form">
+                        <span asp-validation-for="RequestShipmentDetailViewModel.Street" class="invalid"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="ClearShipment" style="display: none">
+            </div>
+        }
+        else
+        {
+            <div id="ShipmentDetail" style="display: none">
+                <div class="row">
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="RequestShipmentDetailViewModel.City"></label>
+                        <input asp-for="RequestShipmentDetailViewModel.City" class="input-form input-field"/>
+                        <span asp-validation-for="RequestShipmentDetailViewModel.City" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12  m6">
+                        <label asp-for="RequestShipmentDetailViewModel.Postcode"></label>
+                        <input asp-for="RequestShipmentDetailViewModel.Postcode" class="input-form input-field"/>
+                        <span asp-validation-for="RequestShipmentDetailViewModel.Postcode" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12">
+                        <label asp-for="RequestShipmentDetailViewModel.Street"></label>
+                        <input asp-for="RequestShipmentDetailViewModel.Street" class="input-form">
+                        <span asp-validation-for="RequestShipmentDetailViewModel.Street" class="invalid"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="ClearShipment">
+            </div>
+        }
+
+    </div>
+</div>
+<div class="card">
+    <div class="card-title">Załączniki</div>
+    <div class="card-content">
+        <div class="file-field input-form">
+            <div class="btn btn waves-effect waves-light  blue darken-4">
+                <span>Wybierz</span>
+                <input asp-for="Files" type="file" accept="image/*,.pdf" multiple>
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="">
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+@{
+    var claims = User;
+    var oid = claims.Claims.FirstOrDefault(c => c.Type == "oid")?.Value;
+}
+
+<input asp-for="EmployeeObjectId" value="@oid" type="hidden">
+</form>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_MaskInputPartial");
+
+    }
+    <script>
+         function validate_money(i) {
+            if (parseFloat(i) == NaN) {
+                return false;
+            }
+            if(i<0){
+                return false;
+            }
+            var valid_dollar_amt_regex = /^\$?[0-9][0-9,]*[0-9]\.?[0-9]{0,2}$/i;
+            return valid_dollar_amt_regex.test(i);
+        }
+        document.addEventListener("DOMContentLoaded",
+            (event) => {
+                FormHelper.blurValidate();
+
+                MaskForm.NipMask("#RequestInvoiceDetailCompanyViewModel_Nip");
+                MaskForm.PostCodeMask("#RequestShipmentDetailViewModel_Postcode");
+                MaskForm.PostCodeMask("#RequestInvoiceDetailCompanyViewModel_AddressViewModel_Postcode");
+                MaskForm.PostCodeMask("#RequestInvoiceDetailIndividualClientViewModel_AddressViewModel_Postcode");
+
+                FormHelper.requestFormChageViewRadioButton();
+            });
+
+              
+    </script>
+}

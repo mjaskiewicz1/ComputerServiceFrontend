@@ -1,0 +1,40 @@
+﻿@using Common.Enums
+@model Common.ViewModels.RequestFilterViewModel
+
+<div class="row">
+    <div class="card-panel">
+        <div class="row">
+            <form asp-action="Filter">
+                <div style="align-items: center; display: flex; flex-wrap: wrap; justify-content: space-around;">
+                    <div class="input-field ">
+                        <label asp-for="Email" class="active"></label>
+                        <input asp-for="Email" class="input-form input-field"/>
+                        <span asp-validation-for="Email" class="invalid"></span>
+                    </div>
+                    <div class="input-field  ">
+
+                        <input asp-for="CreateDateTimeFrom" class="input-form input-field"/>
+                        <span asp-validation-for="CreateDateTimeFrom" class="invalid"></span>
+                        <label class="active " asp-for="CreateDateTimeFrom"></label>
+                    </div>
+                    <div class="input-field">
+
+                        <input asp-for="CreateDateTimeTo" class="input-form input-field"/>
+                        <span asp-validation-for="CreateDateTimeTo" class="invalid"></span>
+                        <label asp-for="CreateDateTimeTo" class="active "></label>
+                    </div>
+                    <div class="input-field ">
+                        <label asp-for="RequestStatus" class="active"></label>
+                        <select asp-for="RequestStatus" class="input-form" asp-items="Html.GetEnumSelectList<RequestStatus>()" multiple="multiple">
+                            <option value="" disabled>Wybierz status zgłoszenia</option>
+                        </select>
+                    </div>
+                    <div>
+
+                        <button type="submit"class="btn btn-block indigo waves-effect waves-light">Filtruj</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

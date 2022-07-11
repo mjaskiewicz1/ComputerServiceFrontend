@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width"/>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8"/>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/materialize/css/materialize.min.css"/>
+    @await RenderSectionAsync("Styles", false)
+    <link rel="stylesheet" href="~/css/site.css"/>
+    <link rel="stylesheet" href="~/lib/sweetalert2/dist/sweetalert2.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+
+</head>
+<body class=" grey lighten-3">
+<header class="dashboard">
+    <nav class="white">
+        <div class="nav-wrapper  ">
+            <a id="layout-btn-nav" href="#" data-target="layout-main-side-nav" class=" sidenav-trigger btn-floating btn-small waves-effect waves-light  hide-on-large-only blue">
+                <i class="material-icons">menu</i>
+            </a>
+            <ul class="right  ">
+                <li class="profile-button">
+                    <a id="dropdown-user-avatar-trigger" href="#" data-target="dropdown-user-avatar">
+                        <i class="large material-icons black-text">account_circle</i>
+                    </a>
+                </li>
+
+                <li>
+                    <ul id="dropdown-user-avatar" class="dropdown-content">
+
+
+                        <li>
+                            <a class="grey-text text-darken-1" asp-controller="Account" asp-action="SignOut"><i class="material-icons">keyboard_tab</i> Wyloguj</a>
+                        </li>
+                    </ul>
+
+
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <aside id="layout-main-side-nav" class="sidenav sidenav-fixed">
+
+        <ul class="collapsible layout-side-nav-item">
+
+            <li class="level-one-menu">
+
+
+                <a class="collapsible-header waves-effect" href="JavaScript:void(0);">
+                    <i class="material-icons layout-side-nav-icon ">settings_applications</i><span class="layout-arrow-right">Ustawienia Aplikacji</span>
+                </a>
+                <div class="collapsible-body">
+                    <ul class="collapsible  layout-collapsible-nav-group main-nav-collapse-one" data-collapsible="accordion">
+                        <li>
+                            <a asp-controller="Config" asp-action="Index">
+                                <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Dane Firmy</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+
+                </div>
+
+
+            </li>
+        </ul>
+        <ul class="collapsible layout-side-nav-item">
+
+            <li class="level-one-menu">
+
+
+                <a class="collapsible-header waves-effect" href="JavaScript:void(0);">
+                    <i class="material-icons layout-side-nav-icon ">settings_applications</i><span class="layout-arrow-right">Zgłoszenia</span>
+                </a>
+                <div class="collapsible-body">
+                    <ul class="collapsible  layout-collapsible-nav-group " data-collapsible="accordion">
+                        <li>
+                            <a asp-controller="Request" asp-action="Index">
+                                <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Lista zgłoszeń</span>
+
+                            </a>
+                            <a asp-controller="Request" asp-action="Index">
+                                <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Dodaj zgłoszenie</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+
+                </div>
+
+
+            </li>
+        </ul>
+        <ul class="collapsible layout-side-nav-item">
+
+            <li class="level-one-menu">
+
+
+                <a class="collapsible-header waves-effect" href="JavaScript:void(0);">
+                    <i class="material-icons layout-side-nav-icon ">settings_applications</i><span class="layout-arrow-right">Magazyn</span>
+                </a>
+                <div class="collapsible-body">
+                    <ul class="collapsible  layout-collapsible-nav-group" data-collapsible="accordion">
+                        <li>
+                            <a asp-controller="Product" asp-action="Index">
+                                <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Lista produktów</span>
+
+                            </a>
+                            <a asp-controller="Product" asp-action="Create">
+                                <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Dodaj produkt</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+
+                </div>
+
+
+            </li>
+        </ul>
+        <ul class="collapsible layout-side-nav-item">
+
+            <li class="level-one-menu">
+
+
+                <a class="collapsible-header waves-effect" href="JavaScript:void(0);">
+                    <i class="material-icons layout-side-nav-icon ">settings_applications</i><span class="layout-arrow-right">Usługi</span>
+                </a>
+                <div class="collapsible-body">
+                    <ul class="collapsible  layout-collapsible-nav-group" data-collapsible="accordion">
+                        <li>
+                            <a asp-controller="Service" asp-action="Index">
+                                <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Lista usług</span>
+
+                            </a>
+                            <a asp-controller="Service" asp-action="Create">
+                                <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Dodaj usługę</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+
+                </div>
+
+
+            </li>
+        </ul>
+        <ul class="collapsible layout-side-nav-item">
+
+            <li class="level-one-menu">
+
+
+                <a class="collapsible-header waves-effect" href="JavaScript:void(0);">
+                    <i class="material-icons layout-side-nav-icon ">settings_applications</i><span class="layout-arrow-right">Faktury</span>
+                </a>
+                <div class="collapsible-body">
+                    <ul class="collapsible  layout-collapsible-nav-group" data-collapsible="accordion">
+                        <li>
+                            <a asp-controller="Invoice" asp-action="Index">
+                                <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Lista faktur</span>
+
+                            </a>
+
+                        </li>
+
+
+                    </ul>
+
+                </div>
+
+
+            </li>
+        </ul>
+    </aside>
+</header>
+@*<li class="level-two-menu">
+    <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0);" >
+        <i class="material-icons layout-side-nav-icon ">settings_input_svideo</i><span class="menu-title layout-arrow-right">Stawki podatkowe</span>
+    </a>
+    <div class="collapsible-body">
+        <ul class="collapsible collapsible-sub layout-collapsible-nav-group" data-collapsible="accordion">
+            <li>
+                <a asp-controller="Tax" asp-action="Index">
+                    <i class="material-icons   layout-radio-button-unchecked">radio_button_unchecked</i><span>Lista stawek</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="#" class="active">
+                    <i class="material-icons layout-radio-button-unchecked">radio_button_unchecked</i><span>Dodaj stawkę</span>
+                </a>
+            </li>
+            <li>
+
+            </li>
+        </ul>
+    </div>
+
+
+</li>*@
+<main class="dashboard">
+
+    @RenderBody()
+</main>
+
+<footer class="dashboard">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/materialize/js/materialize.min.js"></script>
+    <script src="~/lib/materialize/js/init.js"></script>
+
+
+    @await RenderSectionAsync("Scripts", false)
+
+    <script src="~/js/site.js"></script>
+
+</footer>
+
+</body>
+</html>

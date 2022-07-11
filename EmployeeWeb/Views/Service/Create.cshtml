@@ -1,0 +1,75 @@
+﻿@using Common.Enums
+@using Common.ViewModels
+@model Common.ViewModels.ServiceViewModel
+
+@{
+    ViewBag.Title = "Tworzenie usługi";
+    Layout = "_Layout";
+}
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+<div class="paddingpage">
+    <form asp-action="Create">
+        <div ></div>
+        @await Html.PartialAsync("Buttons/_BackSaveButton")
+        <div class="card">
+            <div class="card-content">
+                <div asp-validation-summary="ModelOnly" class="invalid"></div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="input-form"/>
+                        <span asp-validation-for="Name" class="invalid"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m8 ">
+                        <label asp-for="Price"></label>
+                        <input asp-for="Price" class="input-form"/>
+                        <span asp-validation-for="Price" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12 m2 ">
+                        <select asp-for="Tax">
+                            @foreach (var item in TaxRateListViewModel.TaxRate)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        </select>
+                        <label asp-for="Tax"></label>
+                    </div>
+                    <div class="input-field col s12 m2 ">
+                        <label asp-for="BasicUnit" class="active"></label>
+                        <select asp-for="BasicUnit" class="input-form" asp-items="Html.GetEnumSelectList<BasicUnitService>()"></select>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label asp-for="Description"></label>
+                        <textarea asp-for="Description" class="input-form materialize-textarea"></textarea>
+                        <span asp-validation-for="Description" class="invalid"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded",
+            (event) => {
+                FormHelper.blurValidate();
+                $("#Description").characterCounter();
+
+            });
+
+
+    </script>
+}

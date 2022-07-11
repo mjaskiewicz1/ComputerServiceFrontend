@@ -1,0 +1,59 @@
+﻿@model Common.ViewModels.ProductViewModel
+@{
+    ViewBag.Title = $"Szczegóły produktu: {Html.Raw(Model.Name)}";
+}
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+
+<form>
+    <div class="paddingpage">
+        <partial name="Buttons/_BackEditButton" model="@Model.Code"/>
+        <div class="card">
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label asp-for="Code" class="active"></label>
+                        <input asp-for="Code" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="Brand" class="active"></label>
+                        <input asp-for="Brand" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="Model" class="active"></label>
+                        <input asp-for="Model" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12 m6 l3">
+                        <label asp-for="Price" class="active"></label>
+                        <input asp-for="Price" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m6 l3">
+                        <label asp-for="Tax" class="active"></label>
+                        <input asp-for="Tax" class="input-form" asp-format="{0:P}" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m6 l3">
+                        <label asp-for="BasicUnit" class="active"></label>
+                        <input asp-for="BasicUnit" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m6 l3">
+                        <label asp-for="InStock" class="active"></label>
+                        <input asp-for="InStock" class="input-form" type="text" readonly="readonly" disabled="disabled"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label asp-for="Description" class="active"></label>
+                        <textarea asp-for="Description" class=" materialize-textarea input-form" readonly="readonly" disabled="disabled"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>

@@ -1,0 +1,155 @@
+﻿@using Common.Enums
+@using Common.ViewModels
+@model IEnumerable<Common.ViewModels.RequestViewModel>
+
+@{
+    ViewData["Title"] = "Lista Zgłoszeń";
+}
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+
+<div class="paddingpage">
+    @await Html.PartialAsync("Filter/_FilterRequest", new RequestFilterViewModel())
+    @await Html.PartialAsync("Buttons/_CreateButton")
+    <div class="card ">
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rma)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Surname)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.RequestStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDateTime)
+                </th>
+                <th class="center">Akcje</th>
+
+
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rma)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Surname)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RequestStatus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedDateTime)
+                        </td>
+                        <td>
+                            @if (item.RequestStatus != RequestStatus.Zakończone)
+                            {
+                                <div class="center">
+                                    <a class="white-text btn-floating btn-floating  btn-small waves-light green" asp-action="Edit" asp-route-Id="@item.Rma">
+                                        <i class="material-icons center  white-text  white-text">edit</i>
+                                    </a>
+                                    <a class="white-text btn-floating btn-floating  btn-small waves-light blue" asp-action="Details" asp-route-Id="@item.Rma">
+                                        <i class="material-icons center  white-text">info_outline</i>
+                                    </a>
+
+                                    @if (item.RequestStatus == RequestStatus.Wysłane || item.RequestStatus == RequestStatus.Naprawione)
+                                    {
+                                        <button type="button" class="waves-effect waves-light btn blue left" data-id="@item.Rma" onclick="AddInvoice(this)">Dodaj Fakturę</button>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="right">
+
+                                    <a class="white-text btn-floating btn-floating  btn-small waves-light blue" asp-action="Details" asp-route-Id="@item.Rma">
+                                        <i class="material-icons center  white-text">info_outline</i>
+                                    </a>
+
+                                </div>
+                            }
+                        </td>
+
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{
+        <script src="~/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    }
+
+
+    <script>
+        function AddInvoice(button) {
+
+            $.ajax({
+                async: true,
+                type: "Get",
+                url: "@Url.Action("ExistConfig", "Invoice")",
+                data: { id: button.dataset.id },
+
+                success: function(response) {
+
+                    window.location.href = response.redirectToUrl;
+                },
+                error: function(response) {
+                    swal.fire({
+                            title: 'Nieuzupełnione dane',
+                            text: "Czy chcesz uzupełnić dane firmy?",
+                            type: "warning",
+                            showCancelButton: true,
+                            cancelButtonText: "Anuluj ",
+                            confirmButtonText: "Tak",
+                            showLoaderOnConfirm: true,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            customClass: {
+                                confirmButton: 'waves-effect waves-light blue',
+                                cancelButton: 'waves-effect waves-light red',
+                            },
+                        }
+                    ).then(result => {
+                        if (result.isConfirmed) {
+
+                            window.location.href = "@Url.Action("Index", "Config")";
+                        }
+
+
+                    });;
+
+
+                }
+            });
+        }
+    </script>
+}

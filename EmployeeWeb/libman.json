@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "materialize@1.0.0",
+      "destination": "wwwroot/lib/materialize/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "sweetalert2@11.1.8",
+      "destination": "wwwroot/lib/sweetalert2/"
+    },
+    {
+      "library": "jquery.inputmask@5.0.6",
+      "destination": "wwwroot/lib/jquery.inputmask/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/"
+    }
+  ]
+}

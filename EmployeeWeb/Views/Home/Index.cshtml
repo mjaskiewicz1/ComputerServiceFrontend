@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Strona Główna";
+}
+
+<div class="row">
+    <div class="m12 s12 col center">
+        <div class="card-panel green darken-1">
+            <div class="row">
+                <div class=" white-text">
+
+                    <h6 class="center">Aplikacja obsługi serwisu</h6>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{
+        <script src="~/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded",
+            (event) => {
+                var opt = "@Html.Raw(ViewData["configExist"])";
+
+                if (opt === "False") {
+
+                    swal.fire({
+                            title: 'Nieuzupełnione dane',
+                            text: "Czy chcesz uzupełnić dane firmy?",
+                            type: "warning",
+                            icon: "info",
+                            showCancelButton: true,
+                            cancelButtonText: "Nie uzupełnie później  ",
+                            confirmButtonText: "Tak",
+                            showLoaderOnConfirm: true,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            customClass: {
+                                confirmButton: 'waves-effect waves-light blue',
+                                cancelButton: 'waves-effect waves-light red',
+                            },
+                        }
+                    ).then(result => {
+                        if (result.isConfirmed) {
+
+                            window.location.href = "@Url.Action("Index", "Config")";
+                        }
+
+
+                    });;
+                }
+            });
+
+
+    </script>
+}

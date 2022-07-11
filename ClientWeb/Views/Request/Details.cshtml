@@ -1,0 +1,382 @@
+﻿@using Common.Enums
+@model Common.ViewModels.RequestDetailClientViewModel
+
+@{
+    ViewBag.Title = $"Zgłoszenie numer: {Html.Raw(Model.Rma)}";
+    Layout = "_Layout";
+}
+
+<div class="container">
+<form>
+    <h2 class="center-align">Zgłoszenie numer @Html.Raw(Model.Rma)</h2>
+    <div class="card">
+        <div class="card-title">Status Zgłoszenia</div>
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field  col  s12">
+                    <label asp-for="RequestStatus"></label>
+                    <input type="text" value="@Model.RequestStatus" readonly="readonly"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">Dane osobowe</div>
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field  col  s12 m6 ">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="input-form input-field" readonly="readonly"/>
+
+                </div>
+
+
+                <div class="input-field  col  s12 m6 ">
+                    <label asp-for="Surname"></label>
+                    <input asp-for="Surname" class="input-form input-field" readonly="readonly"/>
+                </div>
+                <div class="input-field  col  s12 m6">
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" class="input-form input-field" readonly="readonly"/>
+                </div>
+                <div class="input-field  col  s12 m6">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="input-form input-field" readonly="readonly"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">Dane urządzenia</div>
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field  col  s12 m6 ">
+                    <label asp-for="Brand"></label>
+                    <input asp-for="Brand" class="input-form input-field" readonly="readonly"/>
+                </div>
+                <div class="input-field  col  s12 m6 ">
+                    <label asp-for="Model"></label>
+                    <input asp-for="Model" class="input-form input-field" readonly="readonly"/>
+                </div>
+                <div class="input-field  col  s12 ">
+                    <label asp-for="SerialNumber"></label>
+                    <input asp-for="SerialNumber" class="input-form input-field" readonly="readonly"/>
+                </div>
+                <div class="input-field  col  s12">
+                    <label asp-for="Details"></label>
+                    <textarea asp-for="Details" data-length="250" class="materialize-textarea" readonly="readonly"></textarea>
+                </div>
+                <div class="input-field  col  s12">
+                    <label asp-for="FailureDescription"></label>
+                    <textarea asp-for="FailureDescription" data-length="600" class="materialize-textarea input-form" readonly="readonly"></textarea>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">Dane do faktury</div>
+        <div class="card-content">
+
+            @if (Model.RequestInvoiceDetailCompanyViewModel == null)
+            {
+                <div id="contentInvoiceIndividualClient">
+                    <div class="row">
+                        <div class="input-field  col  s12 m6 ">
+                            <label asp-for="RequestInvoiceDetailIndividualClientViewModel.Name"></label>
+                            <input asp-for="RequestInvoiceDetailIndividualClientViewModel.Name" class="input-form input-field" readonly="readonly"/>
+                        </div>
+                        <div class="input-field  col  s12 m6 ">
+                            <label asp-for="RequestInvoiceDetailIndividualClientViewModel.Surname"></label>
+                            <input asp-for="RequestInvoiceDetailIndividualClientViewModel.Surname" class="input-form input-field" readonly="readonly"/>
+                        </div>
+
+                        <div class="input-field  col  s12 m6 ">
+                            <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City"></label>
+                            <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.City" class="input-form input-field" readonly="readonly"/>
+                        </div>
+                        <div class="input-field  col  s12  m6">
+                            <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.PostcodeWithDash"></label>
+                            <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.PostcodeWithDash" class="input-form input-field" readonly="readonly" id="PostocdeIC"/>
+                        </div>
+                        <div class="input-field  col  s12">
+                            <label asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street"></label>
+                            <input asp-for="RequestInvoiceDetailIndividualClientViewModel.AddressViewModel.Street" class="input-form" readonly="readonly"/>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div id="contentInvoiceCompany">
+                    <div class="row">
+                        <div class="input-field  col  s12 m6 ">
+                            <label asp-for="RequestInvoiceDetailCompanyViewModel.Nip"></label>
+                            <input asp-for="RequestInvoiceDetailCompanyViewModel.Nip" class="input-form input-field" readonly="readonly"/>
+                        </div>
+                        <div class="input-field  col  s12 m6 ">
+                            <label asp-for="RequestInvoiceDetailCompanyViewModel.NameCompany"></label>
+                            <input asp-for="RequestInvoiceDetailCompanyViewModel.NameCompany" class="input-form input-field" readonly="readonly"/>
+                        </div>
+
+                        <div class="input-field  col  s12 m6 ">
+                            <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City"></label>
+                            <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.City" class="input-form input-field" readonly="readonly"/>
+                        </div>
+                        <div class="input-field  col  s12  m6">
+                            <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.PostcodeWithDash"></label>
+                            <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.PostcodeWithDash" class="input-form input-field" readonly="readonly"/>
+                        </div>
+                        <div class="input-field  col  s12">
+                            <label asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street"></label>
+                            <input asp-for="RequestInvoiceDetailCompanyViewModel.AddressViewModel.Street" class="input-form input-field" readonly="readonly">
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @if (Model.RequestShipmentDetailViewModel != null)
+    {
+        <div class="card">
+            <div class="card-title">Dane do wysyłki</div>
+            <div class="card-content">
+                <div id="ShipmentDetail">
+                    <div class="row">
+                        <div class="input-field  col  s12 m6 ">
+                            <label asp-for="RequestShipmentDetailViewModel.City"></label>
+                            <input asp-for="RequestShipmentDetailViewModel.City" class="input-form input-field" readonly="readonly"/>
+                        </div>
+                        <div class="input-field  col  s12  m6">
+                            <label asp-for="RequestShipmentDetailViewModel.PostcodeWithDash"></label>
+                            <input asp-for="RequestShipmentDetailViewModel.PostcodeWithDash" class="input-form input-field" readonly="readonly"/>
+                        </div>
+                        <div class="input-field  col  s12">
+                            <label asp-for="RequestShipmentDetailViewModel.Street"></label>
+                            <input asp-for="RequestShipmentDetailViewModel.Street" class="input-form input-field " readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @await Component.InvokeAsync("Blob", Model.Rma)
+
+
+
+
+</form>
+<div class="card">
+    <div class="card-title">Czat</div>
+    <div class="card-content">
+        <div class="row msg-container" id="chat">
+            <div id="message-container">
+                @{
+                    var employeeFirst = true;
+                }
+                @if (Model.RequestConversationViewModels.Any())
+                {
+                    @foreach (var item in Model.RequestConversationViewModels)
+                    {
+                        if (employeeFirst || item.EmployeeObjectId != null)
+                        {
+                            <div class="col m12 col s12">
+                                <div class="employee">
+                                    <img class="pull-right">
+                                    <p>@item.Message</p>
+                                    <div>
+                                        <span class="date">@item.CreatedDateTime.ToString("g")</span>
+                                    </div>
+                                </div>
+                            </div>
+                            employeeFirst = false;
+                        }
+                        else
+                        {
+                            <div class="col m12 col s12">
+                                <div class="client">
+                                    <img class=" pull-left">
+                                    <p>@item.Message</p>
+                                    <div>
+                                        <strong>@Model.FullName</strong>&nbsp;
+                                        <span class="date">@item.CreatedDateTime.ToString("g")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+
+        </div>
+        <form style="display: inherit" id="newMessageCreate">
+            <div class="row">
+                <div class="col s11">
+                    <input class="input-form" asp-for="RequestConversationClient.Message" name="Message">
+                    <input type="hidden" value="@Model.Rma" asp-for="RequestConversationClient.Rma" name="Rma"/>
+
+                </div>
+                @if (Model.RequestStatus != RequestStatus.Zakończone)
+                {
+                    <div class="col s1 ">
+
+                        <button type="submit" class="btn">
+                            <i class="material-icons">send</i>
+                        </button>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<style>
+    .employee {
+        background: #387ef5;
+        background-color: #387ef5;
+        border: 4px solid #387ef5;
+        border-radius: 5px;
+        color: #FFF;
+        margin: 2%;
+        padding: 2%;
+        position: relative;
+        text-align: left;
+    }
+
+    .employee:after, .employee:before {
+        border: solid transparent;
+        content: " ";
+        left: 100%;
+        pointer-events: none;
+        position: absolute;
+        top: 50%;
+    }
+
+    .employee:after {
+        border-color: rgba(136, 183, 213, 0);
+        border-left-color: #387ef5;
+        border-width: 11px;
+        margin-top: -10px;
+    }
+
+    .client {
+        /*font-weight: bold;*/
+        background: #949494;
+        border: 4px solid #949494;
+        border-radius: 5px;
+        color: #FFF;
+        margin: 2%;
+        padding: 2%;
+        position: relative;
+        text-align: right;
+    }
+
+    .client:after, .client:before {
+        border: solid transparent;
+        content: " ";
+        pointer-events: none;
+        position: absolute;
+        right: 100%;
+        top: 50%;
+    }
+
+    .client:after {
+        border-color: rgba(136, 183, 213, 0);
+        border-right-color: #949494;
+        border-width: 11px;
+        margin-top: -10px;
+    }
+
+    .msg-container {
+        background-color: white;
+        max-height: 350px;
+        overflow-y: scroll;
+        overflow-y: auto;
+    }
+
+    .msg-label {
+        background-color: #387ef5;
+        color: #FFF;
+        z-index: 2;
+    }
+
+    .pointer { cursor: pointer; }
+
+</style>
+
+@section Scripts {
+
+    @{
+
+
+    }
+    <script>
+
+        document.addEventListener("DOMContentLoaded",
+            (event) => {
+
+
+                document.querySelector("#newMessageCreate").addEventListener("submit",
+                    function(e) {
+                        e.preventDefault();
+                        const form = $(this);
+                        //form.validate();
+                        //if (!form.valid()) {
+                        //    return false;
+                        //}
+
+
+                        $.ajax({
+                            async: true,
+                            type: "POST",
+                            url: "@Url.Action("CreateMessageChat", "Request")",
+                            data: $('#newMessageCreate').serialize(),
+
+                            success: function(response) {
+                                var date = new Date(Date.parse(response.createdDateTime)).toLocaleString("pl-PL").replace(",", "");
+
+                                const row = `<div class="col m12 col s12">
+                                                                    <div class="client">
+                                 <img class="pull-right">
+                                   <p>${response.message}</p>
+                                   <div>
+                                   <span class="date">${date}</span>
+                                                                          </div>
+                                                                       </div>
+                                                                  </div>`;
+
+
+                                $("#message-container").append(row);
+
+                                $('#chat').animate({ scrollTop: $('#chat').prop("scrollHeight") }, 500);
+
+                                document.querySelector("#RequestConversationClient_Message").value = '';
+
+                                //"
+                                //    <div class="col m12 col s12">
+                                //    <div class="employee">
+                                //    <img class="pull-right">
+                                //    <p>test</p>
+                                //    <div>
+                                //    <strong>2af3478a-27da-4837-a387-b22b3fb236a8</strong>&nbsp;
+                                //<span class="date">17-02-2022 21:10</span>
+                                //    </div>
+                                //    </div>
+                                //    </div>
+                                console.log(response);
+                                //window.location.href = response.redirectToUrl;
+                            },
+                            error: function() {
+
+
+                            }
+                        });
+
+                    });
+            });
+
+    </script>
+}

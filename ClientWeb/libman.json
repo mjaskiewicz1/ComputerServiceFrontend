@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "materialize@1.0.0",
+      "destination": "wwwroot/lib/materialize/"
+    },
+    {
+      "library": "jquery.inputmask@5.0.6",
+      "destination": "wwwroot/lib/jquery.inputmask/"
+    }
+  ]
+}

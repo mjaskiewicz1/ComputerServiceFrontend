@@ -1,0 +1,340 @@
+﻿@model Common.ViewModels.InvoiceFullDataViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Faktura VAT</title>
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+</head>
+<style>
+
+
+    html, body {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        display: block;
+        font-family: Arial;
+        font-size: 9.5pt;
+    }
+
+    /* -------------------------------------------------------- */
+
+    /* v Style ogólne */
+
+    .cb {
+        clear: both;
+        display: block;
+        height: 0;
+    }
+
+    table td.separator { width: 10mm; }
+
+    div.separator { padding: 5mm 0 0; }
+
+    .lh-12 { line-height: 1.2; }
+
+    /* -------------------------------------------------------- */
+
+    /* v Nagłówek faktury */
+
+    table.fv-head { width: 100%; }
+
+    table.fv-head tr td { vertical-align: top; }
+
+    table.fv-head tr td:nth-child(3) { width: 0; }
+
+    table.fv-head .hdi {
+        text-align: center;
+        width: 60mm;
+    }
+
+    table.fv-head .hdi:not(:last-child) { margin-bottom: 1mm; }
+
+    table.fv-head .hdi .h,
+    table.fv-head .hdi .c { padding: 1mm 0; }
+
+    table.fv-head .hdi .h { background: #dadada; }
+
+    /* -------------------------------------------------------- */
+
+    /* v Dane nabywcy i odbiorcy */
+
+    table.fv-entities { width: 100%; }
+
+    table.fv-entities .edi .h,
+    table.fv-entities .edi .c { padding: 2mm; }
+
+    table.fv-entities .edi .h {
+        background: #dadada;
+        font-weight: bold;
+    }
+
+    table.fv-entities .edi .c { border-bottom: 1px solid #dadada; }
+
+    /* ------------------------------------------------------- */
+
+    /* v Tytuł faktury */
+
+    .fv-title {
+        font-size: 15pt;
+        padding: 10mm 0 6mm;
+        text-align: center;
+    }
+
+    /* ------------------------------------------------------- */
+
+    /* v Pozycje faktury */
+
+    table.fv-main-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table.fv-main-table,
+    table.fv-main-table th,
+    table.fv-main-table td { border: 1px solid #b4b4b4; }
+
+    table.fv-main-table th {
+        background: #dadada;
+        padding: 3mm 1mm 2.5mm;
+    }
+
+    table.fv-main-table td { padding: 1.3mm 1mm 1mm; }
+
+    table.fv-main-table tr th:nth-child(2) { text-align: left; }
+
+    table.fv-main-table tr td:nth-child(1),
+    table.fv-main-table tr td:nth-child(5),
+    table.fv-main-table tr td:nth-child(7),
+    table.fv-main-table tr td:nth-child(8) { text-align: right; }
+
+    table.fv-main-table tr td:nth-child(3),
+    table.fv-main-table tr td:nth-child(4),
+    table.fv-main-table tr td:nth-child(6) { text-align: center; }
+
+    table.fv-main-table tr th:nth-child(2) { min-width: 70mm; }
+
+    table.fv-main-table tr th:nth-child(1) { min-width: 6mm; }
+
+    table.fv-main-table tr th:nth-child(3),
+    table.fv-main-table tr th:nth-child(4) { min-width: 10mm; }
+
+    /* ------------------------------------------------------- */
+
+    /* v Podsumowanie VATu */
+
+    table.fv-summary-vat {
+        border-collapse: collapse;
+        float: right;
+        margin-top: 4mm;
+        max-width: 75%;
+    }
+
+    table.fv-summary-vat,
+    table.fv-summary-vat th,
+    table.fv-summary-vat td { border: 1px solid #b4b4b4; }
+
+    table.fv-summary-vat th {
+        background: #dadada;
+        padding: 2mm 3mm 1.5mm;
+    }
+
+    table.fv-summary-vat td { padding: 1.3mm 3mm 1mm; }
+
+    table.fv-summary-vat td:nth-child(2),
+    table.fv-summary-vat td:nth-child(3),
+    table.fv-summary-vat td:nth-child(4) { text-align: right; }
+
+    /* ------------------------------------------------------- */
+
+    /* v Podsumowanie faktury */
+
+    table.fv-summary { margin-top: 5mm; }
+
+    table.fv-summary tr td:nth-child(1) { padding-right: 2mm; }
+
+    /* ------------------------------------------------------- */
+
+    /* v Informacje dodatkowe */
+
+    table.fv-informations { margin-top: 10mm; }
+
+    table.fv-informations tr td:nth-child(1) { padding-right: 2mm; }
+
+    /* ------------------------------------------------------- */
+
+    /* v Podpisy */
+
+    table.fv-signatures {
+        margin-top: 35mm;
+        width: 100%;
+    }
+
+    table.fv-signatures .signature {
+        border-top: 1px solid #b4b4b4;
+        font-size: 8pt;
+        padding-top: 2mm;
+        text-align: center;
+    }
+</style>
+<body>
+<table class="fv-head">
+    <tr>
+        <td class="lh-12">
+            @Model.Config.Name<br>
+            @Model.Config.AddressViewModel.Street,@Model.Config.AddressViewModel.PostcodeWithDash @Model.Config.PostalTown <br>
+            Tel. @Model.Config.PhoneNumber, e-mail: @Model.Config.Email<br>
+            NIP: @Model.Config.Nip,<br>
+            <br>
+            Numer konta bankowego:<br>
+            @Model.Config.BankName, @Model.Config.BankAccountNumber
+        </td>
+        <td class="separator"></td>
+        <td>
+            <div class="hdi">
+                <div class="h">Miejsce wystawienia:</div>
+                <div class="c">@Model.Config.AddressViewModel.City</div>
+            </div>
+            <div class="hdi">
+                <div class="h">Data wystawienia:</div>
+                <div class="c">@Model.InvoiceDate.ToString("yyy-MM-dd")</div>
+            </div>
+            <div class="hdi">
+                <div class="h">Data sprzedaży:</div>
+                <div class="c">@Model.SaleDate.ToString("yyy-MM-dd")</div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div class="separator"></div>
+
+<table class="fv-entities">
+    <tr>
+        <td class="lh-12">
+            <div class="edi">
+                <div class="h">Sprzedawca:</div>
+                <div class="c">
+                    @Html.Raw(Model.Config.Name)<br>
+                    @Html.Raw(Model.Config.AddressViewModel.Street)<br>
+
+
+                    @Html.Raw(Model.Config.AddressViewModel.PostcodeWithDash) @Html.Raw(Model.Config.PostalTown) <br>
+                    NIP: @Html.Raw(Model.Config.Nip)
+                </div>
+            </div>
+        </td>
+        <td class="separator"></td>
+        <td class="lh-12">
+            <div class="edi">
+                <div class="h">Nabywca:</div>
+
+
+                <div class="c">
+                    @Model.FullName<br/>
+                    @Model.AddressViewModel.Street<br/>
+                    @Model.AddressViewModel.PostcodeWithDash @Model.AddressViewModel.City<br/>
+
+                    NIP:@Model.Nip
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div class="fv-title">
+    Faktura VAT nr @Model.Number
+</div>
+
+<table class="fv-main-table">
+    <tr>
+        <th>Lp</th>
+        <th>Nazwa</th>
+        <th>J.m.</th>
+        <th>Ilość</th>
+        <th>Cena netto</th>
+        <th>VAT [%]</th>
+        <th>Wartość netto</th>
+        <th>Wartość brutto</th>
+    </tr>
+    @{
+        var rowNo = 0;
+    }
+    @foreach (var item in Model.InvoiceItems)
+    {
+        <tr>
+            <td> @(rowNo += 1)</td>
+            <td>@item.Name</td>
+            <td>@item.BasicUnit</td>
+            <td>@item.Amount</td>
+            <td>@item.Price.ToString("N")</td>
+            <td>@item.Tax.ToString("P")</td>
+            <td>@item.NetValue.ToString("N")</td>
+            <td>@item.GrossValue.ToString("N")</td>
+        </tr>
+    }
+
+
+</table>
+<table class="fv-summary-vat">
+    <tr>
+        <th>stawka VAT</th>
+        <th>wartość netto</th>
+        <th>Kwota VAT</th>
+        <th>Wartość brutto</th>
+    </tr>
+
+    @foreach (var item in Model.SummaryTax.SummaryTax)
+    {
+        <tr>
+            <td>@item.Tax.ToString("P")</td>
+            <td>@item.NetTotal.ToString("N")</td>
+            <td>@item.TaxValue.ToString("N")</td>
+            <td>@item.GrossTotal.ToString("N")</td>
+        </tr>
+    }
+    <tr class="sum">
+        <td>Razem</td>
+        <td>@Model.SummaryTax.NetTotal.ToString("N")</td>
+        <td>@Model.SummaryTax.TaxTotal.ToString("N")</td>
+        <td>@Model.SummaryTax.GrossTotal.ToString("N")</td>
+    </tr>
+</table>
+
+<div class="cb"></div>
+
+<table class="fv-summary">
+
+
+    <tr>
+        <td>Razem:</td>
+        <td>@Model.Total.ToString("C")</td>
+    </tr>
+    <tr>
+        <td>Słownie:</td>
+        <td>@Model.TotalInWords</td>
+    </tr>
+</table>
+
+<table class="fv-informations">
+    <tr>
+        <td>Termin płatności:</td>
+        <td> @Model.SaleDate.ToString("yyy-MM-dd")</td>
+
+    </tr>
+    <tr>
+        <td>Metoda płatności:</td>
+        <td>@Model.PaymentsMethod</td>
+    </tr>
+
+</table>
+
+
+</body>
+</html>

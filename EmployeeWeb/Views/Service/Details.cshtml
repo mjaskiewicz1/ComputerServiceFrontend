@@ -1,0 +1,67 @@
+﻿@model Common.ViewModels.ServiceViewModel
+
+@{
+    ViewBag.Title = $"Szczegóły usługi {Model.Name}";
+    Layout = "_Layout";
+}
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+<div class="paddingpage">
+    <form>
+        <partial name="Buttons/_BackEditButton" model="@Model.Code"/>
+        <div class="card">
+            <div class="card-content">
+
+                <div class="row">
+                    <div class="input-field col s12  m6">
+                        <label asp-for="Name" class="active"></label>
+                        <input asp-for="Name" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12  m6">
+                        <label asp-for="Code" class="active"></label>
+                        <input asp-for="Code" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m8 ">
+                        <label asp-for="Price" class="active"></label>
+                        <input asp-for="Price" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m2 ">
+                        <label asp-for="Tax" class="active"></label>
+                        <input asp-for="Tax" asp-format="{0:P}" class="input-form" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m2 ">
+                        <label asp-for="BasicUnit" class="active"></label>
+                        <input asp-for="BasicUnit" class="input-form" readonly="readonly" disabled="disabled">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label asp-for="Description"></label>
+                        <textarea asp-for="Description" class="input-form materialize-textarea" readonly="readonly" disabled="disabled"></textarea>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded",
+            (event) => {
+                FormHelper.blurValidate();
+                $("#Description").characterCounter();
+
+            });
+
+
+    </script>
+}

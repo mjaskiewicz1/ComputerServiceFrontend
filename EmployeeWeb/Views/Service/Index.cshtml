@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Common.ViewModels.ServiceViewModel>
+
+@{
+    ViewBag.Title = "Lista usług";
+    Layout = "_Layout";
+}
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+<div class="paddingpage">
+    @await Html.PartialAsync("Buttons/_CreateButton")
+    <div class="card">
+
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GrossValue)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tax)
+                </th>
+
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GrossValue)
+                        </td>
+                        <td>
+                            @item.Tax.ToString("P")
+                        </td>
+
+                        <td>
+                            <partial name="Buttons/_EditDeleteDetailsButton" model="item.Code"/>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

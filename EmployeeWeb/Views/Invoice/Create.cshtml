@@ -1,0 +1,455 @@
+﻿@using Common.Enums
+@model Common.ViewModels.InvoiceCreateViewModel
+
+@{
+    ViewData["Title"] = $"Tworzenie faktury dla zgłoszenia numer: {Model.Rma}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@await Html.PartialAsync("PageTitle/_PageTitle", ViewData["Title"])
+
+@section Styles
+{
+    <link rel="stylesheet" href="lib/select2/css/select2.min.css"/>
+    <link rel="stylesheet" href="lib/select2/css/select2-materialize.css"/>
+}
+
+<div class="paddingpage">
+<div class="card error-list-content red " id="ErrorListContent" style="display: none;">
+    <ul class="card-content  error-list  ">
+    </ul>
+</div>
+<form class="invoice" id="invoiceData">
+
+    <div class="card-content black-text">
+        <span class="card-title">
+            <button type="submit" id="save-invoice" class="waves-effect waves-light btn"><i class="material-icons left">save</i>Zapisz fakturę</button>
+        </span>
+    </div>
+
+    <div class="row">
+
+        <div class="card">
+            <div class="card-title">Dane do faktury</div>
+            <div class="card-content">
+
+                <div class="row">
+                    <div class="input-field col s12 m6 l4">
+                        <label asp-for="SaleDate" class="active"></label>
+                        <input asp-for="SaleDate" class="input-form input-field"/>
+                        <span asp-validation-for="SaleDate" class="invalid"></span>
+                    </div>
+                    <div class="input-field col s12 m6 l4 ">
+                        <label asp-for="InvoiceDate" class="active"></label>
+                        <input asp-for="InvoiceDate" class="input-form input-field"/>
+                        <span asp-validation-for="InvoiceDate" class="invalid"></span>
+                    </div>
+
+
+                    <div class="input-field col s12 l4  ">
+                        <label asp-for="InvoicePayment" class="active"></label>
+                        <input asp-for="InvoicePayment" class="input-form input-field"/>
+                        <span asp-validation-for="InvoicePayment" class="invalid"></span>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6  ">
+
+                        <select asp-for="PaymentsMethod" class="input-form" asp-items="Html.GetEnumSelectList<PaymentsMethod>()"></select>
+                        <label asp-for="PaymentsMethod" class="active"></label>
+                    </div>
+                    <div class="input-field col s12 m6  ">
+
+                        <select asp-for="PaymentStatus" class="input-form" asp-items="Html.GetEnumSelectList<PaymentStatus>()"></select>
+                        <label asp-for="PaymentStatus" class="active"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Dane Nabywcy</div>
+            <div class="card-content">
+
+                <div class="row">
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="NameCompany" class="active"></label>
+                        <input asp-for="NameCompany" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                        <span asp-validation-for="NameCompany" class="invalid"></span>
+                    </div>
+
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="Nip" class="active"></label>
+                        <input asp-for="Nip" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="Name" class="active"></label>
+                        <input asp-for="Name" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+
+                    <div class="input-field col s12 m6 ">
+                        <label asp-for="Surname" class="active"></label>
+                        <input asp-for="Surname" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m6 l4  ">
+                        <label asp-for="AddressViewModel.City" class="active"></label>
+                        <input asp-for="AddressViewModel.City" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12  m6  l4">
+                        <label asp-for="AddressViewModel.Postcode" class="active"></label>
+                        <input asp-for="AddressViewModel.Postcode" class="input-form input-field" readonly="readonly" disabled="disabled"/>
+                    </div>
+                    <div class="input-field col s12 m12 l4 ">
+                        <label asp-for="AddressViewModel.Street" class="active"></label>
+                        <input asp-for="AddressViewModel.Street" class="input-form input-field" readonly="readonly" disabled="disabled">
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        @{
+            var claims = User;
+          
+            var oid = claims.Claims.FirstOrDefault(c => c.Type == "oid")?.Value;
+        }
+
+        <input asp-for="EmployeeObjectId" value="@oid" type="hidden">
+        <input asp-for="Rma" type="hidden"/>
+        <input asp-for="Total" type="hidden"/>
+
+
+    </div>
+</form>
+<div class="card green">
+    <div class="row">
+        <div class="col s12">
+                <h5 class="white-text center"> Wycena: @Model.Estimate.ToString("C")</h5>
+        </div>
+    </div>
+</div>
+<div class="card">
+
+    <div class="card-content">
+        <div class="row">
+            <div class="col s8">
+                <div>
+                    <label for="products">Wybierz z listy</label>
+                </div>
+                <select class="products-dropdown  select2 browser-default" name="products" style="width: 60%">
+                    @if (Model.ListProducts.Any())
+                    {
+                        @foreach (var item in Model.ListProducts)
+                        {
+                            <option id="@Html.DisplayTextFor(rec => item.Code)"
+                                    value="@Html.DisplayTextFor(rec => item.Code)"
+                                    data-price="@item.Price.ToString("N")"
+                                    data-tax="@item.Tax.ToString("N")"
+                                    data-basic-unit="@item.BasicUnit"
+                                    data-name="@item.Name">
+
+                                @Html.DisplayTextFor(rec => item.Code) @Html.DisplayTextFor(rec => item.Name)
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col s2 m2">
+                <label for="quantity">Ilość</label>
+                <input id="item-quantity" type="number" value="1" min="1" name="quantity"/>
+            </div>
+            <div class="col s2 m2">
+                <br>
+                @*<a asp-action="CreateNew" name="add-product" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Dodaj fakturę</a>*@
+                <a id="add-product" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Dodaj</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <form class="invoice">
+        <table id="selected-products-table" class="responsive-table">
+            <thead>
+            <thead>
+            <tr>
+                <th>
+                    LP
+                </th>
+                <th>
+                    Nazwa
+                </th>
+                <th>
+                    Jednostka
+                </th>
+                <th>
+                    ilosc
+                </th>
+                <th>
+                    Cena netto
+                </th>
+                <th>
+                    Stawka
+                </th>
+                <th>
+                    Wartosc netto
+                </th>
+                <th>
+                    wartosc brutto
+                </th>
+                <th></th>
+            </tr>
+
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </form>
+</div>
+<div class="row" style="margin-top: 80px">
+    <div class="col l4 push-l8">
+        <div class="card">
+            <div class="card-content ">
+                <table class="responsive-table">
+                    <tbody>
+                    <tr>
+                        <td>
+                            Suma Netto
+                        </td>
+                        <td id="netTotal">
+                            0
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Suma Brutto
+                        </td>
+                        <td id="grossTotal">
+                            0
+
+                        </td>
+
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_MaskInputPartial");
+        <script src="~/js/helpeerclass/ValidatorHelper.js"></script>
+        <script src="~/lib/select2/js/select2.full.min.js"></script>
+        <script src="~/lib/select2/js/select2-materialize.js"></script>
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded",
+            (event) => {
+                FormHelper.blurValidate();
+
+                MaskForm.NipMask("#Nip");
+                MaskForm.PostCodeMask("#AddressViewModel_Postcode");
+                MaskForm.PostCodeMask("#RequestInvoiceDetailCompanyViewModel_AddressViewModel_Postcode");
+                document.querySelector("#invoiceData").addEventListener("submit",
+                    function(e) {
+                        e.preventDefault();
+
+                        const form = $(this);
+                        //form.validate();
+                        //if (!form.valid()) {
+                        //    return false;
+                        //}
+                        $.fn.serializeIncludeDisabled = function() {
+                            const disabled = this.find(":input:disabled").removeAttr("disabled");
+                            const serialized = this.serialize();
+                            disabled.attr("disabled", "disabled");
+                            return serialized;
+                        };
+
+
+                        $.ajax({
+                            async: true,
+                            type: "PUT",
+                            url: "@Url.Action("Create", "Invoice")",
+                            data: $('.invoice').serializeIncludeDisabled(),
+
+                            success: function(response) {
+
+                                window.location.href = response.redirectToUrl;
+                            },
+                            error: function(response) {
+
+                                ValidatorHelper.showErrorsModelAll(response.responseJSON.errors, "#ErrorListContent");
+
+
+                            }
+                        });
+
+
+                    });
+
+            });
+
+
+    </script>
+
+
+    <script>
+
+
+        function removeItem(button) {
+
+            const tr = button.parentNode.parentNode;
+            const netTrValue = parseFloat(tr.querySelector('.netValue').innerHTML);
+            const grossTrValue = parseFloat(tr.querySelector('.grossValue').innerHTML);
+
+
+            const netTotalObject = document.getElementById("netTotal");
+            const netTotalValue = parseFloat(netTotalObject.innerHTML);
+
+
+            const grossTotalObject = document.getElementById("grossTotal");
+            const grossTotalValue = parseFloat(grossTotalObject.innerHTML);
+            const netTotal = netTotalValue - netTrValue;
+            netTotalObject.innerHTML = round(netTotal).toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+            const grossTotal = grossTotalValue - grossTrValue;
+            const newGrossTotalValue = round(grossTotal);
+            grossTotalObject.innerHTML = newGrossTotalValue.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+            document.getElementById("Total").value = newGrossTotalValue.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+            tr.parentNode.removeChild(tr);
+
+
+        }
+
+        function toPercent(number) {
+
+            const percent = parseFloat(number * 100).toFixed(2) + "%";
+            return percent;
+        }
+
+        function round(number) {
+            return Number(Math.round(number + 'e+2') + 'e-2');
+        }
+
+        $(document).ready(function() {
+            $('.products-dropdown').select2();
+
+            $("#add-product").click(function() {
+                //https://select2.org/programmatic-control/retrieving-selections
+                let selectedRecord = $('.products-dropdown').select2('data');
+                let amount = $('#item-quantity').val();
+
+                let itemName = $('.products-dropdown').find(':selected').data('name');;
+                let code = selectedRecord[0].id;
+
+                let trs = document.querySelectorAll('#selected-products-table tbody tr ');
+                let rowCount = trs.length;
+             
+                let index = rowCount - 1;
+                if (rowCount > 0) {
+                    if (trs[index].id === code) {
+                        return;
+                    }
+                }
+                rowCount = rowCount + 1;
+                let netTotalObject = document.getElementById("netTotal");
+                let netTotalValue = parseFloat(netTotalObject.innerHTML.replace(",","."));
+
+                let grossTotalObject = document.getElementById("grossTotal");
+                let grossTotalValue = parseFloat(grossTotalObject.innerHTML.replace(",","."));
+
+
+                let price = $('.products-dropdown').find(':selected').data('price');
+                let priceCalculate = price.replace(",", ".");
+                let basicUnit = $('.products-dropdown').find(':selected').data('basic-unit');
+                let tax = $('.products-dropdown').find(':selected').data('tax').replace(",", ".");
+                let netValue = priceCalculate * amount;
+                netValue = round(netValue);
+                
+                let netvaluestr = netValue.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+
+
+                let grossvalue = (1 + parseFloat(tax)) * netValue;
+                grossvalue = round(grossvalue);
+                let grossvaluestr = grossvalue.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+                
+                
+                let indexTable = trs.length;
+               
+
+                tax = tax.replace(".", ",");
+                let row = `
+               <tr id="${code}">
+         
+         
+             <td>
+                      <input type="hidden" name="InvoiceItems[${indexTable}].Code" value="${code}">
+                ${rowCount}
+
+            </td>
+             <td>
+                ${itemName}
+                          <input type="hidden" name="InvoiceItems[${indexTable}].Name" value="${itemName}">
+            </td>
+            <td>
+            ${basicUnit}
+               <input type="hidden" name="InvoiceItems[${indexTable}].BasicUnit" value="${basicUnit}">
+             </td>
+            <td>
+            ${amount}
+             <input type="hidden" name="InvoiceItems[${indexTable}].Amount" value="${amount}">
+            </td>
+            <td>
+             <input type="hidden" name="InvoiceItems[${indexTable}].Price" value="${price}">
+            ${price}
+            </td>
+            <td>
+            ${tax}
+             <input type="hidden" name="InvoiceItems[${indexTable}].Tax" value="${tax}">
+            </td>
+            <td class="netValue">${netvaluestr}
+
+            </td>
+            <td class="grossValue">${grossvaluestr}</td>
+             <td>
+                <button class="waves-effect waves-light btn" role="button" onclick="removeItem(this)" ><i class="material-icons left">delete</i>Usuń</button>
+             </td>
+        </tr>`;
+               
+                $("#selected-products-table tbody").append(row);
+                let nettotal = netTotalValue + netValue;
+                let newNetTotal = round(nettotal);
+                netTotalObject.innerText = newNetTotal.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+
+               
+                let grossTotal = parseFloat(grossTotalValue) + parseFloat(grossvalue);
+                let newGrossTotal = grossTotal;
+                console.log(parseFloat(61.5) + parseFloat(67.65));
+                console.log(grossvalue);
+                console.log(grossTotalValue);
+
+                grossTotalObject.innerText = newGrossTotal.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+                document.getElementById("Total").value = newGrossTotal.toLocaleString('pl-PL', { minimumFractionDigits: 2 });
+            });
+
+
+        });
+    </script>
+
+}
